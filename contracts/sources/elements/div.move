@@ -23,6 +23,18 @@ module shtml::div {
         div
     }
 
+    public fun delete(
+        div: Div,
+    ) {
+        let Div {
+            id,
+            children,
+        } = div;
+
+        children.destroy_empty();
+        id.delete();
+    }
+
     public fun add_child<T: key + store>(
         div: &mut Div,
         child: T,
@@ -32,14 +44,6 @@ module shtml::div {
         transfer::public_transfer(child, object::uid_to_address(&div.id));
     }
 
-    public fun swap_child(
-        div: &mut Div,
-        e1: u64,
-        e2: u64
-    ) {
-        div.children.swap(e1, e2);
-    }
-
     public fun remove_child<T: key + store>(
         div: &mut Div,
         child_to_receive: Receiving<T>,
@@ -47,5 +51,13 @@ module shtml::div {
         let child = transfer::public_receive(&mut div.id, child_to_receive);
 
         child
+    }
+
+    public fun swap_children(
+        div: &mut Div,
+        child1: u64,
+        child2: u64
+    ) {
+        div.children.swap(child1, child2);
     }
 }

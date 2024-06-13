@@ -14,20 +14,20 @@ module shtml::img {
         ismap: bool,
         loading: Option<String>, // auto, eager, or lazy
         referrerpolicy: Option<String>, // no-referrer, no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, or unsafe-url
-        sizes: vector<ImgSizesElement>,
+        sizes: vector<ImgSizesValue>,
         src: String,
-        srcset: vector<ImgSrcsetElement>,
+        srcset: vector<ImgSrcsetValue>,
         title: Option<String>,
         usemap: Option<String>,
         width: Option<u64>,
     }
 
-    public struct ImgSrcsetElement has store {
+    public struct ImgSrcsetValue has store {
         src: String,
         width: u64,
     }
 
-    public struct ImgSizesElement has store {
+    public struct ImgSizesValue has store {
         condition: Option<String>,
         size: u64,
     }
