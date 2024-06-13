@@ -1,21 +1,25 @@
 from pydantic import BaseModel
 
 
+class Div(BaseModel):
+    id: str
+    order: list[str] = []
+
+
 class Img(BaseModel):
-    id: str | None = None
-    alt: str | None
-    crossorigin: str | None
-    decoding: str | None
-    height: int | None
-    ismap: bool
-    loading: str | None
-    referrerpolicy: str | None
+    alt: str | None = None
+    crossorigin: str | None = None
+    decoding: str | None = None
+    height: int | None = None
+    ismap: bool = False
+    loading: str | None = None
+    referrerpolicy: str | None = None
     sizes: list["ImgSizesValue"] = []
     src: str
     srcset: list["ImgSrcsetValue"] = []
-    title: str | None
-    usemap: str | None
-    width: int | None
+    title: str | None = None
+    usemap: str | None = None
+    width: int | None = None
 
 
 class ImgSizesValue(BaseModel):
@@ -31,8 +35,3 @@ class ImgSrcsetValue(BaseModel):
 class P(BaseModel):
     id: str | None = None
     content: str
-
-
-class Div(BaseModel):
-    id: str | None = None
-    children: list[str]

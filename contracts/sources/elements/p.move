@@ -1,6 +1,9 @@
 module shtml::p {
 
     use std::string::{String};
+    use std::type_name::{Self, TypeName};
+    
+    use sui::transfer::{Receiving};
 
     public struct P has key, store {
         id: UID,
@@ -17,5 +20,11 @@ module shtml::p {
         };
 
         p
+    }
+
+    public(package) fun id(
+        p: &P
+    ): ID {
+        object::id(p)
     }
 }

@@ -2,14 +2,20 @@ module shtml::div {
 
     use std::option::{Self};
     use std::string::{Self, String};
+    use std::type_name::{Self, TypeName};
     use std::vector::{Self};
 
+    use sui::object_bag::{Self, ObjectBag};
     use sui::vec_set::{Self, VecSet};
     use sui::transfer::{Receiving};
 
+    use shtml::p::{Self, P};
+
     public struct Div has key, store {
         id: UID,
-        children: vector<ID>
+        children: ObjectBag,
+        count: u64,
+        order: vector<ID>,
     }
 
     public fun create(
@@ -17,7 +23,9 @@ module shtml::div {
     ): Div {
         let div = Div {
             id: object::new(ctx),
-            children: vector::empty(),
+            children: object_bag::new(ctx),
+            count: 0,
+            order: vector::empty(),
         };
 
         div
@@ -29,35 +37,38 @@ module shtml::div {
         let Div {
             id,
             children,
+            count: _,
+            order,
         } = div;
 
         children.destroy_empty();
+        order.destroy_empty();
         id.delete();
     }
 
     public fun add_child<T: key + store>(
-        div: &mut Div,
         child: T,
-        index: u64,
+        div: &mut Div,
     ) {
-        div.children.insert(object::id(&child), index);
-        transfer::public_transfer(child, object::uid_to_address(&div.id));
+        assert!(!div.order.contains(&object::id(&child)));
+        div.order.push_back(object::id(&child));
+        div.children.add(object::id(&child), child);
+        div.count = div.count + 1;
     }
 
     public fun remove_child<T: key + store>(
+        child_id: ID,
         div: &mut Div,
-        child_to_receive: Receiving<T>,
     ): T {
-        let child = transfer::public_receive(&mut div.id, child_to_receive);
-
-        child
+        div.count = div.count - 1;
+        div.children.remove(child_id)
     }
 
     public fun swap_children(
-        div: &mut Div,
         child1: u64,
-        child2: u64
+        child2: u64, 
+        div: &mut Div,
     ) {
-        div.children.swap(child1, child2);
+        div.order.swap(child1, child2);
     }
 }

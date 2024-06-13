@@ -27,21 +27,4 @@ module shtml::body {
 
         body
     }
-
-    public fun add_child<T: key + store>(
-        body: &mut Body,
-        child: T,
-        index: u64,
-    ) {
-        body.children.insert(object::id(&child), index);
-        transfer::public_transfer(child, object::uid_to_address(&body.id));
-    }
-
-    public fun swap_child(
-        body: &mut Body,
-        child1: u64,
-        child2: u64
-    ) {
-        body.children.swap(child1, child2);
-    }
 }
