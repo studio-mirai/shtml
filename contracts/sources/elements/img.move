@@ -114,6 +114,44 @@ module shtml::img {
         img
     }
 
+    public fun create_img_sizes_value(
+        condition: Option<String>,
+        size: u64,
+    ): ImgSizesValue {
+        let value = ImgSizesValue {
+            condition: condition,
+            size: size,
+        };
+
+        value
+    }
+
+    public fun create_img_srcset_value(
+        src: String,
+        width: u64,
+    ): ImgSrcsetValue {
+        let value = ImgSrcsetValue {
+            src: src,
+            width: width,
+        };
+
+        value
+    }
+
+    public fun add_create_img_sizes_value(
+        val: ImgSizesValue,
+        img: &mut Img,
+    ) {
+        img.sizes.push_back(val);
+    }
+
+    public fun add_create_img_srcset_value(
+        val: ImgSrcsetValue,
+        img: &mut Img,
+    ) {
+        img.srcset.push_back(val);
+    }
+
 }
 
 
