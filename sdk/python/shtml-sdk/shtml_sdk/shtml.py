@@ -1,9 +1,12 @@
 import markdown
 from pysui import handle_result
-from pysui.sui.sui_builders.get_builders import GetDynamicFieldObject
+from pysui.sui.sui_builders.get_builders import (
+    GetDynamicFieldObject,
+    GetObjectsOwnedByAddress,
+)
 from pysui.sui.sui_txn.sync_transaction import SuiTransaction
 from pysui.sui.sui_txresults.complex_tx import TxResponse
-from pysui.sui.sui_txresults.single_tx import ObjectRead
+from pysui.sui.sui_txresults.single_tx import ObjectRead, ObjectReadPage
 from pysui.sui.sui_types import (
     ObjectID,
     SuiBoolean,
@@ -24,9 +27,9 @@ from rich import print
 # P: 0x14151113fb04ff03957cf04108ea80f0930f4288e09fe82551924c7527e1137b
 
 TYPES = {
-    "Div": f"{PACKAGE_ID}::div::Div",
-    "Img": f"{PACKAGE_ID}::img::Img",
-    "P": f"{PACKAGE_ID}::p::P",
+    "div": f"{PACKAGE_ID}::div::Div",
+    "img": f"{PACKAGE_ID}::img::Img",
+    "p": f"{PACKAGE_ID}::p::P",
 }
 
 
@@ -75,14 +78,12 @@ class Shtml(Sui):
         txer.move_call(
             target=f"{PACKAGE_ID}::div::add_child",
             arguments=[ObjectID(child.id), ObjectID(div.id)],
-            type_arguments=[TYPES[type(child).__name__]],
+            type_arguments=[self.get_struct_type(child)],
         )
 
         result = handle_result(
             txer.execute(),
         )
-
-        print(result)
 
         return result
 
@@ -212,6 +213,48 @@ class Shtml(Sui):
 
         return result
 
+    def fetch_objects_for_address(
+        self,
+        element_model: Div | Img | P,  # div, img, p
+        address: str | None = None,
+        show_type: bool = False,
+        show_owner: bool = False,
+        show_previous_transaction: bool = False,
+        show_display: bool = False,
+        show_content: bool = False,
+        show_bcs: bool = False,
+        show_storage_rebate: bool = False,
+    ) -> list[ObjectRead]:
+        if not address.startswith("0x"):
+            address = self.config.active_address
+
+        query = {
+            "filter": {
+                "StructType": self.get_struct_type_from_element_model(element_model),
+            },
+            "options": {
+                "showType": show_type,
+                "showOwner": show_owner,
+                "showPreviousTransaction": show_previous_transaction,
+                "showDisplay": show_display,
+                "showContent": show_content,
+                "showBcs": show_bcs,
+                "showStorageRebate": show_storage_rebate,
+            },
+        }
+
+        builder = GetObjectsOwnedByAddress(
+            address=address,
+            query=query,
+        )
+
+        result = handle_result(
+            self.client.execute(builder),
+        )
+
+        if isinstance(result, ObjectReadPage):
+            return result.data
+
     def fetch(
         self,
         object_id: str,
@@ -224,11 +267,23 @@ class Shtml(Sui):
         )
 
         if obj.object_type == f"{PACKAGE_ID}::div::Div":
-            element = self._build_div(obj)
+            element = self.build_div(obj)
         if obj.object_type == f"{PACKAGE_ID}::p::P":
-            element = self._build_p(obj)
+            element = self.build_p(obj)
 
         return element
+
+    def get_struct_type(
+        self,
+        element: Div | P | Img,
+    ):
+        return TYPES[type(element).__name__.casefold()]
+
+    def get_struct_type_from_element_model(
+        self,
+        model: Div | P | Img,
+    ):
+        return TYPES[model.__name__.casefold()]
 
     def render(
         self,
@@ -261,7 +316,7 @@ class Shtml(Sui):
 
         return html
 
-    def _build_div(
+    def build_div(
         self,
         obj: ObjectRead,
     ) -> Div:
@@ -272,7 +327,7 @@ class Shtml(Sui):
 
         return div
 
-    def _build_img(
+    def build_img(
         self,
         obj: ObjectRead,
     ) -> Img:
@@ -293,7 +348,7 @@ class Shtml(Sui):
 
         return img
 
-    def _build_p(
+    def build_p(
         self,
         obj: ObjectRead,
     ) -> P:
