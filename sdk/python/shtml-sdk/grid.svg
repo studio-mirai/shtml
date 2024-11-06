@@ -1,0 +1,27 @@
+<svg width="250" height="250" xmlns="http://www.w3.org/2000/svg">
+<rect x="0" y="0" width="50" height="50" fill="rgb(255, 0, 0)"/>
+<rect x="50" y="0" width="50" height="50" fill="rgb(0, 255, 0)"/>
+<rect x="100" y="0" width="50" height="50" fill="rgb(0, 0, 255)"/>
+<rect x="150" y="0" width="50" height="50" fill="rgb(255, 0, 0)"/>
+<rect x="200" y="0" width="50" height="50" fill="rgb(0, 255, 0)"/>
+<rect x="0" y="50" width="50" height="50" fill="rgb(0, 255, 0)"/>
+<rect x="50" y="50" width="50" height="50" fill="rgb(0, 0, 255)"/>
+<rect x="100" y="50" width="50" height="50" fill="rgb(255, 0, 0)"/>
+<rect x="150" y="50" width="50" height="50" fill="rgb(0, 255, 0)"/>
+<rect x="200" y="50" width="50" height="50" fill="rgb(0, 0, 255)"/>
+<rect x="0" y="100" width="50" height="50" fill="rgb(0, 0, 255)"/>
+<rect x="50" y="100" width="50" height="50" fill="rgb(255, 0, 0)"/>
+<rect x="100" y="100" width="50" height="50" fill="rgb(0, 255, 0)"/>
+<rect x="150" y="100" width="50" height="50" fill="rgb(0, 0, 255)"/>
+<rect x="200" y="100" width="50" height="50" fill="rgb(255, 0, 0)"/>
+<rect x="0" y="150" width="50" height="50" fill="rgb(255, 0, 0)"/>
+<rect x="50" y="150" width="50" height="50" fill="rgb(0, 255, 0)"/>
+<rect x="100" y="150" width="50" height="50" fill="rgb(0, 0, 255)"/>
+<rect x="150" y="150" width="50" height="50" fill="rgb(255, 0, 0)"/>
+<rect x="200" y="150" width="50" height="50" fill="rgb(0, 255, 0)"/>
+<rect x="0" y="200" width="50" height="50" fill="rgb(0, 255, 0)"/>
+<rect x="50" y="200" width="50" height="50" fill="rgb(0, 0, 255)"/>
+<rect x="100" y="200" width="50" height="50" fill="rgb(255, 0, 0)"/>
+<rect x="150" y="200" width="50" height="50" fill="rgb(0, 255, 0)"/>
+<rect x="200" y="200" width="50" height="50" fill="rgb(0, 0, 255)"/>
+</svg>
